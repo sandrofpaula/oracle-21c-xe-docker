@@ -21,7 +21,9 @@
 
 ---
 
-### … ou criar um novo repositório na linha de comando
+## Criar um novo repositório na linha de comando
+
+```bash
 echo "# oracle-21c-xe-docker" >> README.md
 git init
 git add README.md
@@ -29,7 +31,12 @@ git commit -m "first commit"
 git branch -M main
 git remote add origin https://github.com/sandrofpaula/oracle-21c-xe-docker.git
 git push -u origin main
-### … ou envie um repositório existente a partir da linha de comando
+```
+
+## Enviar um repositório existente a partir da linha de comando
+
+```bash
 git remote add origin https://github.com/sandrofpaula/oracle-21c-xe-docker.git
 git branch -M main
 git push -u origin main
+```
