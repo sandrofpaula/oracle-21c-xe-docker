@@ -40,3 +40,43 @@ git remote add origin https://github.com/sandrofpaula/oracle-21c-xe-docker.git
 git branch -M main
 git push -u origin main
 ```
+
+## Conectar Contêineres em uma Rede Docker
+
+Após a criação do contêiner do Oracle XE, você pode conectar outros contêineres à mesma rede para que eles possam se comunicar entre si. Aqui estão os passos para fazer isso:
+
+1. **Liste os contêineres em execução:**
+
+   ```bash
+   docker ps
+   ```
+
+   Este comando exibe todos os contêineres em execução, mostrando informações como o `Container ID` e o `Name` de cada contêiner. Essas informações são úteis para identificar o contêiner que você deseja conectar à rede.
+
+2. **Inspecione o contêiner para verificar as redes conectadas:**
+
+   ```bash
+   docker inspect <container_id_or_name> | grep -i "network"
+   ```
+
+   Este comando exibe detalhes sobre as redes às quais o contêiner está conectado, filtrando a saída para mostrar apenas as informações relacionadas à rede (`NetworkMode`). Isso ajuda a identificar se o contêiner já está conectado à rede desejada ou se precisa ser conectado manualmente.
+
+3. **Conecte o contêiner à rede desejada:**
+
+   ```bash
+   docker network connect <nome_da_rede> <nome_do_container>
+   ```
+
+   - `<nome_da_rede>`: O nome da rede Docker à qual você deseja conectar o contêiner.
+   - `<nome_do_container>`: O nome ou ID do contêiner que você deseja conectar à rede.
+
+   Este comando conecta o contêiner especificado à rede, permitindo que ele se comunique com outros contêineres na mesma rede. Isso é particularmente útil quando você tem um contêiner de aplicação que precisa se conectar ao banco de dados Oracle XE para acessar e manipular os dados.
+
+### Exemplo prático:
+Suponha que você tenha um contêiner chamado `my_app_container` e deseja conectá-lo à rede `oracle-net`, que é a rede onde o contêiner do Oracle XE está conectado. Você executaria o seguinte comando:
+
+```bash
+docker network connect oracle-net my_app_container
+```
+
+Agora, o contêiner `my_app_container` pode se comunicar diretamente com o contêiner Oracle XE através da rede `oracle-net`.
