@@ -1,0 +1,62 @@
+# Versão do docker-compose que está sendo usada
+version: '3.8'
+
+# Definição dos serviços que serão executados
+services:
+  # Serviço para o banco de dados Oracle 21c XE
+  oracle-db:
+    # Imagem Docker do Oracle Database Express Edition 21c
+    # 'gvenzl/oracle-xe:21-slim' é uma imagem otimizada para uso em contêineres, fornecida pela comunidade.
+    image: gvenzl/oracle-xe:21-slim
+    
+    # Nome do contêiner (opcional, facilita a identificação no Docker)
+    container_name: oracle-21c-xe
+    
+    # Mapeamento das portas do contêiner para o host
+    ports:
+      # Mapeia a porta 1521 do contêiner (porta padrão do Oracle DB) para a porta 1521 do host
+      - "1521:1521"
+      #- "1522:1521" # caso haja conflito
+      # Mapeia a porta 5500 do contêiner (porta para o Oracle Enterprise Manager) para a porta 5500 do host
+      - "5500:5500"
+      #- "5501:5500" # caso haja conflito
+      #https://localhost:5500/em
+
+    # Variáveis de ambiente para configurar o contêiner
+    environment:
+      # Define a senha padrão para os usuários administrativos (ex.: sys, system)
+      - ORACLE_PASSWORD=oracle123
+      #- ORACLE_PASSWORD=123456
+      
+      # Define o conjunto de caracteres do banco de dados para UTF-8 (padrão recomendado)
+      - ORACLE_CHARACTERSET=AL32UTF8
+
+    # Montagem de volumes para persistência de dados
+    # O volume permite que os dados do banco de dados sejam armazenados localmente no host, garantindo que
+    # o banco de dados persista mesmo após a reinicialização ou remoção do contêiner.
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    
+    # Define a rede que o contêiner vai usar
+    networks:
+      - oracle-net
+
+# Definição dos volumes que serão usados pelos serviços
+volumes:
+  # O volume 'oracle-data' é usado para armazenar os dados do Oracle DB de forma persistente.
+  oracle-data:
+    driver: local
+
+# Definição da rede que será usada pelos serviços
+networks:
+  # Rede bridge padrão, que permite comunicação entre contêineres no mesmo host
+  oracle-net:
+    driver: bridge
+
+
+
+# docker-compose up -d 
+# docker-compose up --build -d
+
+
+# docker-compose down
